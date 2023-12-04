@@ -4,34 +4,17 @@ const ENDPOINT = 'https://newsapi.org/v2/everything';
 const KEY_API = '1bfb956be4624deab8ea82acf099560b';
 
 const searchParams = new URLSearchParams({
-  key: KEY_API,
-  pageSize: 10,
+  apiKey: KEY_API,
+  pageSize: 5,
 });
 
-class NewsApi {
-  constructor() {
-    this.searchQuery = '';
-    this.queryPage = 1;
-  }
+async function getNews(query) {
+  const URL = `${ENDPOINT}?q=${query}&${searchParams}`;
 
-  getNews() {
-    const url = `${ENDPOINT}?${searchParams}&`;
+  const response = await axios.get(URL);
+  const data = await response.data;
 
-    return fetch(url, options)
-      .then(response => response.json())
-      .then(data => {
-        this.incrementPage();
-        return data;
-      });
-  }
-
-  incrementPage() {
-    this.queryPage += 1;
-  }
-
-  resetPage() {
-    this.queryPage = 1;
-  }
+  return data.articles;
 }
 
-export default NewsApi;
+export default getNews;
